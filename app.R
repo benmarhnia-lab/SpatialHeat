@@ -1,5 +1,5 @@
 library(shiny)
-setwd("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Documents - Kristen’s MacBook Pro/EnviroResearchArmin")
+#setwd("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Documents - Kristen’s MacBook Pro/EnviroResearchArmin")
 #addResourcePath(prefix = "imgResources", directoryPath = "myimages")
 
 #myPlotPaths <- c(paste0("myimages/", "BayesianAbsolute", ".png"),paste0("myimages/", "BayesRelative", ".png"))
