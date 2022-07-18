@@ -1,13 +1,10 @@
 library(shiny)
+#Change this to match where it is on your computer
 setwd("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Documents - Kristen’s MacBook Pro/EnviroResearchArmin")
-#addResourcePath(prefix = "imgResources", directoryPath = "myimages")
 
-#myPlotPaths <- c(paste0("myimages/", "BayesianAbsolute", ".png"),paste0("myimages/", "BayesRelative", ".png"))
-# Define UI for miles per gallon app ----
 zip_to_county <- read.csv("ZIP-COUNTY-FIPS_2017-06.csv")
 CA_county <- zip_to_county[which(zip_to_county$STATE == "CA"),]
 ui <- pageWithSidebar(
-  
   # App title ----
   headerPanel("Impacts of Heat using Various Extreme Heat Definitions in California"),
   
@@ -28,21 +25,25 @@ ui <- pageWithSidebar(
     ),
   # Main panel for displaying outputs ----
 mainPanel(
-  
+    "Bayesian Results for 95% Extreme Heat Definition",
     fluidRow(
       splitLayout(cellWidths = c("50%", "50%"), imageOutput("bayes_abs"), imageOutput("bayes_rel"))
     ),
+    "Absolute Scale Most Effective Heat Event Definitions",
     fluidRow(
       splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_whichmax_abs", click = "plot_click"), plotOutput("plot_largeclust_abs"))
     ),
+    "Relative Scale Most Effective Heat Event Definitions",
     fluidRow(
       splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_whichmax_rel", click = "plot_click_rel"), plotOutput("plot_largeclust_rel",))
     ),
+    "Absolute and Relative Scale Hospitalizations Attributable to Heat for those Heat Events Plotted Above",
     fluidRow(
       splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_maxval_abs"), plotOutput("plot_maxval_rel"))
     ),
+    "Absolute and Relative Scale Hospitalizations attributable to Heat for that definiton Selected to the Left",
     fluidRow(
-      splitLayout(cellWidths = c("50%", "50%"), plotOutput("Plot_relative"), plotOutput("Plot_abs"))
+      splitLayout(cellWidths = c("50%", "50%"), plotOutput("Plot_abs"), plotOutput("Plot_relative"))
     )
   )
 )
@@ -184,7 +185,7 @@ server <- function(input, output) {
       nearPoints(m_rel, input$plot_click_rel)
       # nearPoints() also works with hover and dblclick events
     })
-    #To Add
+ 
     #Select county have map, move mouse on specific zip code see specific estimate
     #Each county overall ranking on absolute scale and relative scale which defintion has highest number of 
     #hospitalizations
@@ -198,6 +199,5 @@ server <- function(input, output) {
   
   
 
-  
-
 shinyApp(ui, server)
+
