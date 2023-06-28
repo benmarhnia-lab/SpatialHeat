@@ -1,9 +1,8 @@
 library(shiny)
 #Change this to match where it is on your computer
-setwd("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Documents - Kristen’s MacBook Pro/EnviroResearchArmin")
+setwd("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Documents - Kristen’s MacBook Pro/EnviroResearchArmin/app")
 
-zip_to_county <- read.csv("ZIP-COUNTY-FIPS_2017-06.csv")
-CA_county <- zip_to_county[which(zip_to_county$STATE == "CA"),]
+CA_county <- read.csv("CA_county.csv")
 ui <- pageWithSidebar(
   # App title ----
   headerPanel("Impacts of Heat using Various Extreme Heat Definitions in California"),
@@ -25,10 +24,6 @@ ui <- pageWithSidebar(
     ),
   # Main panel for displaying outputs ----
 mainPanel(
-    "Bayesian Results for 95% Extreme Heat Definition",
-    fluidRow(
-      splitLayout(cellWidths = c("50%", "50%"), imageOutput("bayes_abs"), imageOutput("bayes_rel"))
-    ),
     "Absolute Scale Most Effective Heat Event Definitions",
     fluidRow(
       splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot_whichmax_abs", click = "plot_click"), plotOutput("plot_largeclust_abs"))
@@ -65,7 +60,8 @@ joined$whichMax<- apply(joined[,c(2:28)], 1, function(x) which.max(x))
 joined$largeClust = ifelse(joined$whichMax < 10, "max", ifelse(joined$whichMax < 19, "min", "diff"))
 joined$whichMax = names(joined)[(joined$whichMax+1)]
 
-path = "~/Downloads/ShapefileZCTA/cb_2016_us_zcta510_500k.shp"
+#Edit this row to be where you are storing this file
+path = "cb_2016_us_zcta510_500k.shp"
 #Path is the path to the shapefile for ZCTAs in california (shp)
 
 joined$whichMax = as.factor(joined$whichMax)
@@ -123,22 +119,22 @@ server <- function(input, output) {
   output$caption <- renderText({
     captionText_absolute()
   })
-  output$bayes_abs <- renderImage({
-    list(
-      src = file.path("www", paste0("BayesianAbsolute.png")),
-      contentType = "image/png",
-      width = 400,
-      height = 400
-    )
-  }, deleteFile = FALSE)
-  output$bayes_rel <- renderImage({
-    list(
-      src = file.path("www", paste0("BayesRelative.png")),
-      contentType = "image/png",
-      width = 400,
-      height = 400
-    )
-  }, deleteFile = FALSE)
+  # output$bayes_abs <- renderImage({
+  #   list(
+  #     src = file.path("www", paste0("BayesianAbsolute.png")),
+  #     contentType = "image/png",
+  #     width = 400,
+  #     height = 400
+  #   )
+  # }, deleteFile = FALSE)
+  # output$bayes_rel <- renderImage({
+  #   list(
+  #     src = file.path("www", paste0("BayesRelative.png")),
+  #     contentType = "image/png",
+  #     width = 400,
+  #     height = 400
+  #   )
+  # }, deleteFile = FALSE)
   # Generate a plot of the requested variable against mpg ----
   # and only exclude outliers if requested
     output$plot_whichmax_abs <- renderPlot({
@@ -197,6 +193,10 @@ server <- function(input, output) {
     
 }
   
+  
+
+shinyApp(ui, server)
+
   
 
 shinyApp(ui, server)
